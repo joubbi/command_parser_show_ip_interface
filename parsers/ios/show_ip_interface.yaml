@@ -1,4 +1,8 @@
 ---
+
+# This is a command parser for Ansible network-engine.
+# It parses the Cisco IOS command "show ip interface".
+
 - name: parser meta data
   parser_metadata:
     version: 1.0
@@ -26,11 +30,30 @@
         content: "{{ item }}"
       register: ip_address
 
+    - name: match IP helper
+      pattern_match:
+        regex: "Helper address is (.*)"
+        content: "{{ item }}"
+      register: helper
+
     - name: match mtu
       pattern_match:
         regex: "MTU is (\\d+)"
         content: "{{ item }}"
       register: mtu
+
+    - name: match proxy arp
+      pattern_match:
+        regex: "Proxy ARP is (.*)"
+        content: "{{ item }}"
+      register: proxy_arp
+
+    - name: match local proxy arp
+      pattern_match:
+        regex: "Local Proxy ARP is (.*)"
+        content: "{{ item }}"
+      register: local_proxy_arp
+
 
     - name: match outgoing ACL
       pattern_match:
@@ -40,13 +63,19 @@
 
     - name: match inbound ACL
       pattern_match:
-              #regex: "reliability.*rxload\\s(\\S+)"
-              #regex: "Inbound  access list is\\s(\\S+)"
         regex: "  Inbound  access list is (.*)"
         content: "{{ item }}"
       register: inbound_acl
+
+    - name: match unicarst rpf
+      pattern_match:
+        regex: "IP verify source reachable-via (.*)"
+        content: "{{ item }}"
+      register: unicast_rpf
+    
   loop: "{{ section }}"
   register: interfaces
+
 
 - name: generate json data structure
   json_template:
@@ -59,15 +88,23 @@
               value: "{{ item.name.matches.0 }}"
             - key: ip_address
               value: "{{ item.ip_address.matches.0 }}"
+            - key: helper
+              value: "{{ item.helper.matches.0 }}"
             - key: mtu
               value: "{{ item.mtu.matches.0 }}"
+            - key: proxy_arp
+              value: "{{ item.proxy_arp.matches.0 }}"
+            - key: local_proxy_arp
+              value: "{{ item.local_proxy_arp.matches.0 }}"
             - key: outgoing_acl
               value: "{{ item.outgoing_acl.matches.0 }}"
             - key: inbound_acl
               value: "{{ item.inbound_acl.matches.0 }}"
+            - key: unicast_rpf
+              value: "{{ item.unicast_rpf.matches.0 }}"
   loop: "{{ interfaces }}"
   export: yes
-  #export_as: dict
+  export_as: dict
   #extend: ios_interface_facts
   register: ip_interface_facts
 
