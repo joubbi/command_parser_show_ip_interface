@@ -11,6 +11,26 @@ It can be used as an example and should be self-explanatory.
 Inspiration came from this great blog:
 https://termlen0.github.io/2018/06/26/observations/
 
+##Example
+
+Here is an example of how the output might look like:
+
+```
+    "Vlan252": {
+        "config": {
+            "helper": "192.168.1.37",
+            "inbound_acl": "vrf-cool-acl",
+            "ip_address": "10.4.38.126/26",
+            "local_proxy_arp": "disabled",
+            "mtu": "1500",
+            "name": "Vlan252",
+            "outgoing_acl": "not set",
+            "proxy_arp": "enabled",
+            "unicast_rpf": null
+        }
+    },
+```
+
 
 
 ___
