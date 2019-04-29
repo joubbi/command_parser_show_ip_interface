@@ -102,7 +102,10 @@
               value: "{{ item.inbound_acl.matches.0 }}"
             - key: unicast_rpf
               value: "{{ item.unicast_rpf.matches.0 }}"
+
   loop: "{{ interfaces }}"
+
+
   export: yes
   export_as: dict
   #extend: ios_interface_facts
