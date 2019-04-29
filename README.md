@@ -11,7 +11,7 @@ It can be used as an example and should be self-explanatory.
 Inspiration came from this great blog:
 https://termlen0.github.io/2018/06/26/observations/
 
-##Example
+## Example
 
 Here is an example of how the output might look like:
 
